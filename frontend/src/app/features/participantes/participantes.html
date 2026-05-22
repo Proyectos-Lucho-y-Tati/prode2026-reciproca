@@ -1,0 +1,85 @@
+<main class="main">
+    <h2><i class="fas fa-user-group"></i> Participantes Confirmados</h2>
+    <p class="subtitulo">
+        <i class="fas fa-circle-info" style="color:var(--clr-primary-light);font-size:0.8rem"></i>
+        Listado de todos los participantes que han confirmado su planilla.
+    </p>
+
+    @if (cargando()) {
+    <div class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+    }
+
+    @if (!cargando() && planillas().length === 0) {
+    <div class="estado-vacio">
+        <i class="fas fa-user-group icono-vacio"></i>
+        <p class="titulo-vacio">Sin participantes aún</p>
+        <p class="desc-vacio">No hay planillas confirmadas todavía.</p>
+    </div>
+    }
+
+    @if (!cargando() && planillas().length > 0) {
+    <div class="table-container">
+        <table class="tabla-participantes">
+            <caption>
+                Total confirmados al {{ hoy | date:'dd/MM/yyyy' }}: {{ planillas().length }}
+            </caption>
+            <thead>
+                <tr>
+                    <th class="col-nombre">
+                        <div class="header-nombre-content">
+                            <span class="header-label">Nombre y Apellido</span>
+                            <div class="buscador-inline">
+                                <i class="fas fa-magnifying-glass"></i>
+                                <input type="text" id="buscarParticipante" name="buscarParticipante"
+                                    class="buscador-input" placeholder="Buscar..." (input)="filtrar($event)" />
+                            </div>
+                            <span class="total-chip">
+                                ({{ planillasFiltradas().length }} participantes)
+                            </span>
+                        </div>
+                    </th>
+                    <th style="width: 150px;">Planilla N°</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (p of planillasPaginadas(); track p.codigo) {
+                <tr>
+                    <td data-label="Nombre">{{ p.nombre }} {{ p.apellido }}</td>
+                    <td data-label="Planilla">
+                        <a [routerLink]="['/planillas', p.codigo]" class="link-planilla" title="Ver planilla">
+                            {{ p.codigo }}
+                            <i class="fas fa-arrow-up-right-from-square" style="font-size:0.6rem;opacity:0.6"></i>
+                        </a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    @if (totalPaginas() > 1) {
+    <div class="paginacion">
+        <button class="btn-pag" [disabled]="paginaActual() === 1" (click)="cambiarPagina(paginaActual() - 1)"
+            title="Anterior">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="pag-numeros">
+            @for (p of paginas(); track p) {
+            <button class="btn-num" [class.activo]="p === paginaActual()" (click)="cambiarPagina(p)">
+                {{ p }}
+            </button>
+            }
+        </div>
+
+        <button class="btn-pag" [disabled]="paginaActual() === totalPaginas()"
+            (click)="cambiarPagina(paginaActual() + 1)" title="Siguiente">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+    }
+    }
+</main>

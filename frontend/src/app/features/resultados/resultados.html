@@ -1,0 +1,157 @@
+<main class="main">
+    <h2><i class="fas fa-futbol" aria-hidden="true"></i> Resultados de los Partidos</h2>
+    <p class="subtitulo">
+        <i class="fas fa-circle-info" style="color:var(--clr-primary-light);font-size:0.8rem"></i>
+        Consultá los resultados oficiales de los partidos de la fase de grupos.
+    </p>
+
+    @if (cargando()) {
+    <div class="spinner-container" role="status" aria-label="Cargando datos...">
+        <div class="spinner"></div>
+    </div>
+    }
+
+    @if (!cargando() && resultadosGuardados().size === 0) {
+    <div class="estado-vacio">
+        <i class="fas fa-futbol icono-vacio"></i>
+        <p class="titulo-vacio">Aún no hay resultados</p>
+        <p class="desc-vacio">Los resultados oficiales de los partidos aparecerán aquí a medida que se jueguen.</p>
+    </div>
+    }
+
+    @if (!cargando() && partidos().length > 0 && resultadosGuardados().size > 0) {
+    <div class="referencia-estados">
+        <span class="ref-item"><i class="fas fa-check-circle" style="color:var(--clr-success-text)"></i>
+            Finalizado</span>
+        <span class="ref-item"><i class="fas fa-clock" style="color:var(--clr-text-muted)"></i> Pendiente</span>
+    </div>
+
+    <!-- Resumen de progreso -->
+    <div class="stats-overview">
+        <div class="overview-card">
+            <i class="fas fa-futbol" aria-hidden="true"></i>
+            <div class="overview-data">
+                <span class="overview-num">{{ partidos().length }}</span>
+                <span class="overview-label">Partidos Totales</span>
+            </div>
+        </div>
+        <div class="overview-card">
+            <i class="fas fa-check-double" aria-hidden="true"></i>
+            <div class="overview-data">
+                <span class="overview-num">{{ resultadosGuardados().size }}</span>
+                <span class="overview-label">Jugados</span>
+            </div>
+        </div>
+        <div class="overview-card">
+            <i class="fas fa-clock" aria-hidden="true"></i>
+            <div class="overview-data">
+                <span class="overview-num">{{ partidos().length - resultadosGuardados().size }}</span>
+                <span class="overview-label">Por Jugar</span>
+            </div>
+        </div>
+        <div class="overview-card">
+            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+            <div class="overview-data">
+                <span class="overview-num">
+                    {{ (partidos().length ? (resultadosGuardados().size / partidos().length * 100) : 0) | number:'1.0-0'
+                    }}%
+                </span>
+                <span class="overview-label">Avance</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtro de grupo -->
+    <div class="filtro-grupos" role="group" aria-label="Filtrar por grupo">
+        <button type="button" class="btn-grupo" [class.activo]="grupoActivo() === null"
+            [attr.aria-pressed]="grupoActivo() === null" (click)="grupoActivo.set(null)">
+            Todos
+        </button>
+        @for (g of grupos; track g) {
+        <button type="button" class="btn-grupo" [class.activo]="grupoActivo() === g" [class.completo]="grupoCompleto(g)"
+            [attr.aria-pressed]="grupoActivo() === g"
+            [attr.aria-label]="'Grupo ' + g + (grupoCompleto(g) ? ' — completo' : '')" (click)="grupoActivo.set(g)">
+            {{ g }}
+            @if (grupoCompleto(g)) {
+            <i class="fas fa-check" aria-hidden="true" style="font-size:0.6rem"></i>
+            }
+        </button>
+        }
+    </div>
+
+    <!-- Partidos por grupo -->
+    @for (grupo of gruposMostrados(); track grupo) {
+    @if (getPartidosPorGrupo(grupo).length > 0) {
+    <div class="grupo-bloque" role="region" [attr.aria-label]="'Grupo ' + grupo">
+
+        <div class="grupo-header">
+            <div class="header-main">
+                <span class="grupo-tag">GRUPO {{ grupo }}</span>
+                <span class="grupo-estado">
+                    {{ contarGuardadosEnGrupo(grupo) }}/{{ getPartidosPorGrupo(grupo).length }} jugados
+                </span>
+            </div>
+            <div class="group-teams-mobile">
+                @for (eq of getEquiposDelGrupo(grupo); track eq.nombre) {
+                <div class="mobile-team-item">
+                    <img [src]="eq.bandera" [alt]="eq.nombre" class="flag-mini" />
+                    <span class="team-name-mini">{{ eq.nombre }}</span>
+                </div>
+                }
+            </div>
+        </div>
+
+        <div class="partidos-lista">
+            @for (partido of getPartidosPorGrupo(grupo); track partido.id) {
+            <div class="partido-row" [class.guardado]="resultadosGuardados().has(partido.id)">
+                <span class="partido-n" aria-hidden="true">#{{ partido.numero }}</span>
+
+                <div class="partido-equipo partido-equipo--local">
+                    <span class="equipo-txt">{{ partido.equipoLocalShow }}</span>
+                    <img [src]="partido.equipoLocalBandera" [alt]="'Bandera de ' + partido.equipoLocalShow" class="flag"
+                        width="24" height="16" />
+                </div>
+
+                <div class="opciones-resultado" role="group"
+                    [attr.aria-label]="'Resultado del partido ' + partido.numero">
+                    <button type="button" class="opcion-btn" [class.activa-local]="getSeleccion(partido.id) === 'LOCAL'"
+                        [class.opaca]="resultadosGuardados().has(partido.id) && getSeleccion(partido.id) !== 'LOCAL'"
+                        disabled aria-hidden="true">L</button>
+                    <button type="button" class="opcion-btn"
+                        [class.activa-empate]="getSeleccion(partido.id) === 'EMPATE'"
+                        [class.opaca]="resultadosGuardados().has(partido.id) && getSeleccion(partido.id) !== 'EMPATE'"
+                        disabled aria-hidden="true">E</button>
+                    <button type="button" class="opcion-btn"
+                        [class.activa-visitante]="getSeleccion(partido.id) === 'VISITANTE'"
+                        [class.opaca]="resultadosGuardados().has(partido.id) && getSeleccion(partido.id) !== 'VISITANTE'"
+                        disabled aria-hidden="true">V</button>
+                </div>
+
+                <div class="partido-equipo partido-equipo--visit">
+                    <img [src]="partido.equipoVisitanteBandera" [alt]="'Bandera de ' + partido.equipoVisitanteShow"
+                        class="flag" width="24" height="16" />
+                    <span class="equipo-txt">{{ partido.equipoVisitanteShow }}</span>
+                </div>
+
+                <div class="partido-accion">
+                    @if (resultadosGuardados().has(partido.id)) {
+                    <span class="badge-status badge-finalizado" title="Finalizado">
+                        <i class="fas fa-check" aria-hidden="true"></i>
+                    </span>
+                    } @else {
+                    <span class="badge-status badge-pendiente" title="Pendiente">
+                        <i class="fas fa-clock" aria-hidden="true"></i>
+                    </span>
+                    }
+                </div>
+
+            </div>
+            }
+        </div>
+
+    </div>
+    }
+    }
+
+    }
+</main>

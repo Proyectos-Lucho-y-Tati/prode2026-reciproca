@@ -1,0 +1,404 @@
+/* ── Sobreescritura de styles.css ────────────────────────────────────────────────── */
+.btn-grupo {
+    background: var(--clr-surface);
+}
+
+.btn-grupo:hover {
+    border-color: var(--clr-primary-light);
+    color: var(--clr-primary-light);
+}
+
+.btn-grupo.activo {
+    background: var(--clr-primary-light);
+    color: white;
+    border-color: var(--clr-primary-light);
+    box-shadow: 0 0 0 2px white, 0 0 0 4px var(--clr-primary-light);
+}
+
+.overview-card i {
+    font-size: 1.8rem;
+    color: var(--clr-primary-light);
+    background: var(--clr-surface-alt);
+}
+
+.a {
+    color: var(--clr-primary-light);
+}
+
+.a:hover {
+    color: var(--clr-primary-dark);
+}
+
+.footer a {
+    color: var(--clr-primary-light);
+}
+
+/* ── Tabs ────────────────────────────────────────────────────────────── */
+.tabs-wrap {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1.75em;
+    border-bottom: 2px solid var(--clr-border-strong);
+}
+
+.tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.65em 1.5em;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--clr-text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 0.2px;
+}
+
+.tab-btn i {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.tab-btn:hover {
+    color: var(--clr-primary-dark);
+}
+
+.tab-btn.activo {
+    color: var(--clr-primary-dark);
+    border-bottom-color: var(--clr-primary-dark);
+}
+
+.tab-btn.activo i {
+    opacity: 1;
+    color: var(--clr-primary-light);
+}
+
+/* ── Filtro grupos ───────────────────────────────────────────────────── */
+.filtro-grupos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35em;
+    margin-bottom: 1.5em;
+}
+
+/* ── Animación Odometer ──────────────────────────────────────────────── */
+@property --num {
+    syntax: "<integer>";
+    initial-value: 0;
+    inherits: true;
+}
+
+.odometer {
+    counter-reset: num var(--num);
+    transition: --num 2.5s cubic-bezier(0.1, 0.9, 0.2, 1);
+    /* Inicia en 0 si no se ha aplicado el estilo */
+    --num: 0;
+}
+
+.odometer::after {
+    content: counter(num);
+}
+
+/* ── Stats grid (predicciones) ───────────────────────────────────────── */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.25em;
+}
+
+/* ── Stat card base ──────────────────────────────────────────────────── */
+.stat-card {
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border-strong);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 0.85em 1.25em;
+    background: linear-gradient(to right, #f8f9fa, #ffffff);
+    border-bottom: 1px solid var(--clr-border);
+}
+
+.stat-num {
+    background: var(--color-brand);
+    color: white;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    padding: 0.2em 0.6em;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.stat-equipos {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.3px;
+}
+
+.stat-vs {
+    color: var(--clr-text-muted);
+    font-weight: 400;
+    font-size: 0.7rem;
+}
+
+.stat-barras {
+    padding: 1.25em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+    flex-grow: 1;
+}
+
+.barra-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 40px;
+    align-items: center;
+    gap: 0.75em;
+}
+
+.barra-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--clr-text);
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+}
+
+.barra-track {
+    height: 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.barra-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Barras predicciones (colores originales) */
+.barra-local {
+    background: var(--clr-accent);
+}
+
+.barra-empate {
+    background: var(--color-link);
+}
+
+.barra-visitante {
+    background: var(--color-action);
+}
+
+/* Barras pronósticos (posiciones) */
+.barra-pos1 {
+    background: var(--clr-accent);
+}
+
+.barra-pos2 {
+    background: var(--color-link);
+}
+
+.barra-pos3 {
+    background: var(--color-action);
+}
+
+.barra-pos4 {
+    background: var(--color-brand);
+}
+
+.barra-pct {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    text-align: right;
+}
+
+.stat-card-footer {
+    padding: 0.75em 1.25em;
+    background: #fafafa;
+    border-top: 1px solid var(--clr-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.favorito-label {
+    font-size: 0.7rem;
+    color: var(--clr-text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.favorito-valor {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--clr-primary-dark);
+    text-transform: uppercase;
+}
+
+/* ── Pronósticos específicos ─────────────────────────────────────────── */
+.pronosticos-intro {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    font-size: 0.82rem;
+    color: var(--clr-text-muted);
+    background: var(--clr-surface-alt);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-md);
+    padding: 0.75em 1em;
+    margin-bottom: 1.25em;
+}
+
+.pronosticos-intro i {
+    color: var(--clr-primary-light);
+    flex-shrink: 0;
+}
+
+.legend-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: 0.2em;
+    font-size: 0.78rem;
+    flex-wrap: wrap;
+    width: 100%;
+    /* Forza a que ocupe el ancho y se alinee a la izquierda */
+}
+
+.legend-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.pos-1-dot {
+    background: var(--clr-accent);
+}
+
+.pos-2-dot {
+    background: var(--color-link);
+}
+
+.pos-3-dot {
+    background: var(--color-action);
+}
+
+.pos-4-dot {
+    background: var(--color-brand);
+}
+
+.pronosticos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 1.25em;
+}
+
+.pronostico-card .stat-card-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.6em;
+}
+
+.pronostico-nota {
+    font-size: 0.75rem;
+    color: var(--clr-text-muted);
+    font-style: italic;
+    line-height: 1.4;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Badges de posición */
+.pos-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 0.62rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: var(--font-display);
+}
+
+.pos-badge-1 {
+    background: var(--clr-accent);
+    color: white;
+}
+
+.pos-badge-2 {
+    background: var(--color-link);
+    color: white;
+}
+
+.pos-badge-3 {
+    background: var(--color-action);
+    color: white;
+}
+
+.pos-badge-4 {
+    background: var(--color-brand);
+    color: white;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .stats-overview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+
+    .stats-grid,
+    .pronosticos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .barra-row {
+        grid-template-columns: 100px 1fr 35px;
+    }
+
+    .tab-btn {
+        padding: 0.55em 1em;
+        font-size: 0.82rem;
+    }
+
+    .legend-inline {
+        margin-left: 0;
+        margin-top: 0.25em;
+    }
+}
+
+@media (max-width: 600px) {
+    .stats-overview {
+        grid-template-columns: 1fr;
+    }
+}

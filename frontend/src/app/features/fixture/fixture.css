@@ -1,0 +1,392 @@
+/* ── Subtítulo ───────────────────────────────────────────────────────── */
+/* .subtitulo movido a global styles.css */
+
+/* ── Tabs de fase ────────────────────────────────────────────────────── */
+.fase-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    margin-bottom: 1.25em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--clr-border);
+}
+
+.fase-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.5em 1.2em;
+    border: 1px solid var(--clr-border-strong);
+    border-radius: 20px;
+    background: var(--clr-surface);
+    color: var(--clr-text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: var(--font-body);
+}
+
+.fase-tab:hover {
+    border-color: var(--wc-mexico);
+    color: var(--wc-mexico);
+    background: rgba(60, 172, 59, 0.05);
+}
+
+.fase-tab.activo {
+    border-color: var(--wc-usa);
+    background: linear-gradient(135deg, var(--wc-usa), #3a4bb0);
+    color: white;
+    box-shadow: 0 4px 12px rgba(42, 57, 141, 0.3);
+}
+
+.fase-count {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 0 6px;
+    font-size: 0.7rem;
+}
+
+.fase-tab:not(.activo) .fase-count {
+    background: var(--clr-surface-alt);
+    color: var(--clr-text-muted);
+}
+
+/* ── Sub-filtro grupos ───────────────────────────────────────────────── */
+.filtro-grupos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+    margin-bottom: 1.25em;
+}
+
+/* .btn-grupo movido a global styles.css */
+
+/* ── Groups grid ─────────────────────────────────────────────────────── */
+.groups-grid {
+    gap: 1.25em;
+}
+
+.group-table-wrap {
+    border: 1px solid var(--clr-border-strong);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    background: var(--clr-surface);
+}
+
+.group-caption {
+    display: flex;
+    flex-direction: column;
+    /* ← igual que planilla */
+    gap: 0.4em;
+    padding: 0.6em 1em;
+    background: linear-gradient(to right, var(--wc-usa), #3a4bb0);
+}
+
+.caption-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.caption-left {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+}
+
+.group-letter {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+}
+
+.group-label {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.group-teams-mobile {
+    display: none;
+}
+
+.tabla-grupo {
+    margin: 0;
+    table-layout: fixed;
+}
+
+.tabla-grupo thead th {
+    background: #f8fafb;
+    border-bottom: 1px solid var(--clr-border-strong);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.65rem;
+}
+
+.tabla-grupo tbody td {
+    padding: var(--spacing-sm);
+    font-size: 0.78rem;
+}
+
+/* Columnas optimizadas */
+.th-num {
+    width: 22px;
+    text-align: center;
+}
+
+.th-center {
+    text-align: center;
+    width: 28px;
+}
+
+.th-date {
+    width: 45px;
+    text-align: center;
+}
+
+.th-sede {
+    width: 85px;
+    line-height: 1.1;
+    white-space: normal !important;
+}
+
+.col-muted {
+    color: var(--clr-text-muted);
+}
+
+.date-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.1;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.time-txt {
+    font-size: 0.65rem;
+    font-weight: 400;
+    opacity: 0.8;
+}
+
+.equipo-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.equipo-txt {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1px;
+    color: var(--wc-neutral-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 65px;
+    line-height: 1;
+    margin-top: 2px;
+}
+
+/* Badges */
+.badge-final {
+    display: inline-block;
+    background: #e8f5e9;
+    color: var(--wc-mexico);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 0.2em 0.6em;
+    border-radius: 8px;
+}
+
+.badge-vs {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--clr-text-muted);
+    letter-spacing: 1px;
+}
+
+.partido-jugado td {
+    opacity: 0.6;
+}
+
+/* ── Eliminatorias ───────────────────────────────────────────────────── */
+.elim-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+}
+
+.elim-card {
+    display: grid;
+    grid-template-columns: 28px 1fr 44px 1fr auto;
+    align-items: center;
+    gap: 1em;
+    padding: 1em 1.25em;
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.elim-card:hover {
+    border-color: var(--wc-usa);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: scale(1.01);
+}
+
+.elim-num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--clr-text-muted);
+    text-align: center;
+}
+
+.elim-equipo {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+}
+
+.elim-equipo--local {
+    justify-content: flex-end;
+}
+
+.elim-equipo--visit {
+    justify-content: flex-start;
+}
+
+.elim-nomb {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--wc-neutral-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+}
+
+.flag-elim {
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.elim-vs {
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--wc-canada);
+    letter-spacing: 1px;
+}
+
+.elim-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.15em;
+}
+
+.elim-fecha {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--wc-neutral-dark);
+}
+
+.elim-hora {
+    font-size: 0.7rem;
+    color: var(--clr-text-muted);
+    font-weight: 500;
+}
+
+.elim-sede {
+    font-size: 0.68rem;
+    color: var(--clr-text-muted);
+    max-width: 120px;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.8;
+}
+
+.por-definir {
+    font-size: 0.78rem;
+    color: var(--clr-text-muted);
+    font-style: italic;
+    font-weight: 500;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .group-teams-mobile {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8em;
+        width: 100%;
+        padding-top: 0.4em;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mobile-team-item {
+        display: flex;
+        align-items: center;
+        gap: 0.3em;
+    }
+
+    .flag-mini {
+        width: 18px;
+        height: 12px;
+        border-radius: 2px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .team-name-mini {
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .th-date {
+        width: 60px;
+    }
+
+    .equipo-txt {
+        display: none;
+    }
+
+    .th-sede {
+        display: none;
+    }
+
+    .elim-card {
+        grid-template-columns: 24px 1fr 36px 1fr;
+    }
+
+    .elim-meta {
+        display: none;
+    }
+
+    .elim-nomb {
+        font-size: 0.75rem;
+    }
+
+    .subtitulo {
+        font-size: 0.78rem;
+    }
+}

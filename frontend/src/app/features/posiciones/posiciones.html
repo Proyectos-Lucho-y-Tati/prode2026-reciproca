@@ -1,0 +1,157 @@
+<main class="main">
+    <h2><i class="fas fa-trophy"></i> Tabla de Posiciones</h2>
+    <p class="subtitulo">
+        <i class="fas fa-circle-info" style="color:var(--clr-primary-light);font-size:0.8rem"></i>
+        Clasificación general de los participantes basada en los aciertos obtenidos.
+    </p>
+
+    @if (cargando()) {
+    <div class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+    }
+
+    @if (!cargando() && posiciones().length === 0) {
+    <div class="estado-vacio">
+        <i class="fas fa-hourglass-half icono-vacio"></i>
+        <p class="titulo-vacio">Aún no hay resultados</p>
+        <p class="desc-vacio">Las posiciones se actualizarán a medida que se carguen los resultados de los partidos.</p>
+    </div>
+    }
+
+    @if (!cargando() && posiciones().length > 0) {
+
+    <!-- Podio top 3 agrupado -->
+    @if (podio().length > 0) {
+    <div class="podio">
+
+        <!-- 2° lugar (Plata) -->
+        @if (podio()[1]) {
+        <div class="podio-item podio-segundo">
+            <div class="podio-medal"><i class="fas fa-medal second-place"></i></div>
+            <div class="podio-info">
+                <div class="podio-nombres-scroll">
+                    @for (p of podio()[1].integrantes; track p.codigoPlanilla) {
+                    <span class="podio-nombre">{{ p.nombre }} {{ p.apellido }}</span>
+                    }
+                </div>
+                <span class="podio-puntos">{{ podio()[1].puntos }} pts</span>
+            </div>
+            <div class="podio-base podio-base-2">2°</div>
+        </div>
+        }
+
+        <!-- 1° lugar (Oro) -->
+        @if (podio()[0]) {
+        <div class="podio-item podio-primero">
+            <div class="podio-medal"><i class="fas fa-trophy first-place"></i></div>
+            <div class="podio-info">
+                <div class="podio-nombres-scroll">
+                    @for (p of podio()[0].integrantes; track p.codigoPlanilla) {
+                    <span class="podio-nombre">{{ p.nombre }} {{ p.apellido }}</span>
+                    }
+                </div>
+                <span class="podio-puntos">{{ podio()[0].puntos }} pts</span>
+            </div>
+            <div class="podio-base podio-base-1">1°</div>
+        </div>
+        }
+
+        <!-- 3° lugar (Bronce) -->
+        @if (podio()[2]) {
+        <div class="podio-item podio-tercero">
+            <div class="podio-medal"><i class="fas fa-medal third-place"></i></div>
+            <div class="podio-info">
+                <div class="podio-nombres-scroll">
+                    @for (p of podio()[2].integrantes; track p.codigoPlanilla) {
+                    <span class="podio-nombre">{{ p.nombre }} {{ p.apellido }}</span>
+                    }
+                </div>
+                <span class="podio-puntos">{{ podio()[2].puntos }} pts</span>
+            </div>
+            <div class="podio-base podio-base-3">3°</div>
+        </div>
+        }
+
+    </div>
+    }
+
+    <!-- Tabla limpia -->
+    <div class="table-container">
+        <div class="table-wrap">
+            <table class="tabla-pos">
+                <thead>
+                    <tr>
+                        <th class="col-pos">#</th>
+                        <th class="col-nombre">
+                            <div class="header-nombre-content">
+                                <span class="header-label">Participante</span>
+                                <div class="buscador-inline">
+                                    <i class="fas fa-magnifying-glass"></i>
+                                    <input type="text" id="buscarPosicion" name="buscarPosicion" class="buscador-input"
+                                        placeholder="Buscar..." (input)="filtrar($event)" />
+                                </div>
+                                <span class="total-chip">
+                                    {{ posiciones()[0]?.totalPartidos ?? 0 }} partidos jugados
+                                </span>
+                            </div>
+                        </th>
+                        <th class="col-planilla">Planilla</th>
+                        <th class="col-pts">Puntos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (pos of posicionesPaginadas(); track pos.codigoPlanilla; let i = $index) {
+                    <tr [class]="getClaseRow(pos.posicion)" [style.animation-delay.ms]="i * 50">
+                        <td class="col-pos">
+                            @switch (pos.posicion) {
+                            @case (1) { <i class="fas fa-trophy first-place" title="1° puesto"></i> }
+                            @case (2) { <i class="fas fa-medal second-place" title="2° puesto"></i> }
+                            @case (3) { <i class="fas fa-medal third-place" title="3° puesto"></i> }
+                            @default { <span class="pos-num">{{ pos.posicion }}</span> }
+                            }
+                        </td>
+                        <td class="col-nombre">
+                            <span class="nombre-participante">{{ pos.nombre }} {{ pos.apellido }}</span>
+                        </td>
+                        <td class="col-planilla">
+                            <a [routerLink]="['/planillas', pos.codigoPlanilla]" class="link-planilla"
+                                title="Ver planilla">
+                                {{ pos.codigoPlanilla }}
+                                <i class="fas fa-arrow-up-right-from-square" style="font-size:0.6rem;opacity:0.6"></i>
+                            </a>
+                        </td>
+                        <td class="col-pts">
+                            <span class="pts-badge" [class.pts-top]="pos.posicion <= 3">{{ pos.puntos }}</span>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Paginación -->
+    @if (totalPaginas() > 1) {
+    <div class="paginacion">
+        <button class="btn-pag" (click)="paginaAnterior()" [disabled]="paginaActual() === 1" title="Anterior">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="pag-numeros">
+            @for (p of paginas(); track p) {
+            <button class="btn-num" [class.activo]="p === paginaActual()" (click)="irAPagina(p)">
+                {{ p }}
+            </button>
+            }
+        </div>
+
+        <button class="btn-pag" (click)="paginaSiguiente()" [disabled]="paginaActual() === totalPaginas()"
+            title="Siguiente">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+    }
+
+    }
+</main>

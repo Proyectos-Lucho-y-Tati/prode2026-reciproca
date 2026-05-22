@@ -4,12 +4,13 @@
 
   <div class="navbar-brand">
     <a routerLink="/home" aria-label="Prode Mundial 2026 — inicio">
-      <span class="brand-icon" aria-hidden="true">⚽</span>
+      <img src="assets/images/icono.png" alt="Logo La Recíproca" class="logo-header">
       <span class="brand-text">Prode <strong>2026</strong></span>
     </a>
   </div>
 
-  <div class="countdown-nav" [class.expirado]="tiempoExpirado()" title="Tiempo restante para cargar y confirmar planillas">
+  <div class="countdown-nav" [class.expirado]="tiempoExpirado()"
+    title="Tiempo restante para cargar y confirmar planillas">
     <i class="fas fa-clock" aria-hidden="true"></i>
     <div class="countdown-content">
       <span class="countdown-label">Cierra en:</span>
@@ -17,13 +18,14 @@
     </div>
   </div>
 
-  <a [routerLink]="admin() ? '/admin' : '/admin/login'" class="btn-admin" aria-label="Acceso al panel de administración">
+  <a [routerLink]="admin() ? '/admin' : '/admin/login'" class="btn-admin"
+    aria-label="Acceso al panel de administración">
     <i class="fas fa-lock" aria-hidden="true"></i>
     <span>Admin</span>
     @if (pendientesCount() > 0) {
-      <span class="badge-notif" [attr.aria-label]="pendientesCount() + ' planillas pendientes'">
-        {{ pendientesCount() }}
-      </span>
+    <span class="badge-notif" [attr.aria-label]="pendientesCount() + ' planillas pendientes'">
+      {{ pendientesCount() }}
+    </span>
     }
   </a>
 
@@ -34,74 +36,74 @@
 
   <ul class="navbar-menu" id="navbar-menu" [class.open]="menuAbierto()" role="list">
     @if (!tiempoExpirado()) {
-      <!-- Antes de la fecha límite (Carga habilitada) -->
-      <li role="listitem">
-        <a routerLink="/reglamento" routerLinkActive="activo" (click)="cerrarMenu()">Reglamento</a>
-      </li>
-      <li role="listitem">
-        <a routerLink="/fixture" routerLinkActive="activo" (click)="cerrarMenu()">Fixture</a>
-      </li>
-      <li role="listitem">
-        <a routerLink="/planilla" routerLinkActive="activo" (click)="cerrarMenu()">Planilla</a>
-      </li>
-      <li role="listitem">
-        <a routerLink="/participantes" routerLinkActive="activo" (click)="cerrarMenu()">Participantes</a>
-      </li>
-      <li role="listitem">
-        <a routerLink="/estadisticas" routerLinkActive="activo" (click)="cerrarMenu()">Estadísticas</a>
-      </li>
+    <!-- Antes de la fecha límite (Carga habilitada) -->
+    <li role="listitem">
+      <a routerLink="/reglamento" routerLinkActive="activo" (click)="cerrarMenu()">Reglamento</a>
+    </li>
+    <li role="listitem">
+      <a routerLink="/fixture" routerLinkActive="activo" (click)="cerrarMenu()">Fixture</a>
+    </li>
+    <li role="listitem">
+      <a routerLink="/planilla" routerLinkActive="activo" (click)="cerrarMenu()">Planilla</a>
+    </li>
+    <li role="listitem">
+      <a routerLink="/participantes" routerLinkActive="activo" (click)="cerrarMenu()">Participantes</a>
+    </li>
+    <li role="listitem">
+      <a routerLink="/estadisticas" routerLinkActive="activo" (click)="cerrarMenu()">Estadísticas</a>
+    </li>
     } @else {
-      <!-- Después de la fecha límite (Carga deshabilitada) -->
-      <li role="listitem">
-        <a routerLink="/fixture" routerLinkActive="activo" (click)="cerrarMenu()">Fixture</a>
-      </li>
-      <li role="listitem">
-        <a routerLink="/participantes" routerLinkActive="activo" (click)="cerrarMenu()">Participantes</a>
-      </li>
-      <li role="listitem">
-        <a routerLink="/resultados" routerLinkActive="activo" (click)="cerrarMenu()">Resultados</a>
-      </li>
-      <li role="listitem">
-        <a routerLink="/posiciones" routerLinkActive="activo" (click)="cerrarMenu()">Posiciones</a>
-      </li>
-      <li role="listitem">
-        <a routerLink="/estadisticas" routerLinkActive="activo" (click)="cerrarMenu()">Estadísticas</a>
-      </li>
+    <!-- Después de la fecha límite (Carga deshabilitada) -->
+    <li role="listitem">
+      <a routerLink="/fixture" routerLinkActive="activo" (click)="cerrarMenu()">Fixture</a>
+    </li>
+    <li role="listitem">
+      <a routerLink="/participantes" routerLinkActive="activo" (click)="cerrarMenu()">Participantes</a>
+    </li>
+    <li role="listitem">
+      <a routerLink="/resultados" routerLinkActive="activo" (click)="cerrarMenu()">Resultados</a>
+    </li>
+    <li role="listitem">
+      <a routerLink="/posiciones" routerLinkActive="activo" (click)="cerrarMenu()">Posiciones</a>
+    </li>
+    <li role="listitem">
+      <a routerLink="/estadisticas" routerLinkActive="activo" (click)="cerrarMenu()">Estadísticas</a>
+    </li>
     }
     <li role="listitem" class="nav-admin-mobile">
       <a [routerLink]="admin() ? '/admin' : '/admin/login'" routerLinkActive="activo" (click)="cerrarMenu()">
         <i class="fas fa-lock" aria-hidden="true" style="margin-right: 0.4em;"></i> Panel Admin
         @if (pendientesCount() > 0) {
-          <span class="badge-notif-inline">{{ pendientesCount() }}</span>
+        <span class="badge-notif-inline">{{ pendientesCount() }}</span>
         }
       </a>
     </li>
   </ul>
 
 </nav>
-  
+
 @if (breadcrumbRootLabel()) {
-  <div class="breadcrumb-outer">
-    <div class="breadcrumb-inner">
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <ol>
-          <li>
-            <a [routerLink]="breadcrumbRootLink()">
-              @if (breadcrumbRootLabel() === 'Inicio') { <i class="fas fa-home" aria-hidden="true"></i> }
-              @else { <i class="fas fa-gauge-high" aria-hidden="true"></i> }
-              <span>{{ breadcrumbRootLabel() }}</span>
-            </a>
-          </li>
-          <li class="separator">
-            <i class="fas fa-chevron-right" aria-hidden="true"></i>
-          </li>
-          <li class="current" aria-current="page">
-            {{ breadcrumbPageLabel() }}
-          </li>
-        </ol>
-      </nav>
-    </div>
+<div class="breadcrumb-outer">
+  <div class="breadcrumb-inner">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li>
+          <a [routerLink]="breadcrumbRootLink()">
+            @if (breadcrumbRootLabel() === 'Inicio') { <i class="fas fa-home" aria-hidden="true"></i> }
+            @else { <i class="fas fa-gauge-high" aria-hidden="true"></i> }
+            <span>{{ breadcrumbRootLabel() }}</span>
+          </a>
+        </li>
+        <li class="separator">
+          <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        </li>
+        <li class="current" aria-current="page">
+          {{ breadcrumbPageLabel() }}
+        </li>
+      </ol>
+    </nav>
   </div>
+</div>
 }
 
 <!-- Toast Container Global -->
@@ -112,50 +114,50 @@
 <!-- Bottom Navigation Bar (Mobile Only) -->
 <nav class="bottom-nav" aria-label="Navegación móvil">
   @if (!tiempoExpirado()) {
-    <!-- Antes de la fecha límite (Carga habilitada) -->
-    <a routerLink="/reglamento" routerLinkActive="activo" class="bottom-nav-item">
-      <i class="fas fa-book"></i>
-      <span>Reglamento</span>
-    </a>
-    <a routerLink="/fixture" routerLinkActive="activo" class="bottom-nav-item">
-      <i class="fas fa-calendar-days"></i>
-      <span>Fixture</span>
-    </a>
-    <a routerLink="/planilla" routerLinkActive="activo" class="bottom-nav-item bottom-nav-item--main">
-      <div class="bottom-nav-fab">
-        <i class="fas fa-pencil"></i>
-      </div>
-    </a>
-    <a routerLink="/participantes" routerLinkActive="activo" class="bottom-nav-item">
-      <i class="fas fa-user-group"></i>
-      <span>Participantes</span>
-    </a>
-    <a routerLink="/estadisticas" routerLinkActive="activo" class="bottom-nav-item">
-      <i class="fas fa-chart-simple"></i>
-      <span>Estadísticas</span>
-    </a>
+  <!-- Antes de la fecha límite (Carga habilitada) -->
+  <a routerLink="/reglamento" routerLinkActive="activo" class="bottom-nav-item">
+    <i class="fas fa-book"></i>
+    <span>Reglamento</span>
+  </a>
+  <a routerLink="/fixture" routerLinkActive="activo" class="bottom-nav-item">
+    <i class="fas fa-calendar-days"></i>
+    <span>Fixture</span>
+  </a>
+  <a routerLink="/planilla" routerLinkActive="activo" class="bottom-nav-item bottom-nav-item--main">
+    <div class="bottom-nav-fab">
+      <i class="fas fa-pencil"></i>
+    </div>
+  </a>
+  <a routerLink="/participantes" routerLinkActive="activo" class="bottom-nav-item">
+    <i class="fas fa-user-group"></i>
+    <span>Participantes</span>
+  </a>
+  <a routerLink="/estadisticas" routerLinkActive="activo" class="bottom-nav-item">
+    <i class="fas fa-chart-simple"></i>
+    <span>Estadísticas</span>
+  </a>
   } @else {
-    <!-- Después de la fecha límite (Carga deshabilitada) -->
-    <a routerLink="/fixture" routerLinkActive="activo" class="bottom-nav-item">
-      <i class="fas fa-calendar-days"></i>
-      <span>Fixture</span>
-    </a>
-    <a routerLink="/participantes" routerLinkActive="activo" class="bottom-nav-item">
-      <i class="fas fa-user-group"></i>
-      <span>Participantes</span>
-    </a>
-    <a routerLink="/resultados" routerLinkActive="activo" class="bottom-nav-item">
-      <i class="fas fa-futbol"></i>
-      <span>Resultados</span>
-    </a>
-    <a routerLink="/posiciones" routerLinkActive="activo" class="bottom-nav-item">
-      <i class="fas fa-trophy"></i>
-      <span>Posiciones</span>
-    </a>
-    <a routerLink="/estadisticas" routerLinkActive="activo" class="bottom-nav-item">
-      <i class="fas fa-chart-simple"></i>
-      <span>Estadísticas</span>
-    </a>
+  <!-- Después de la fecha límite (Carga deshabilitada) -->
+  <a routerLink="/fixture" routerLinkActive="activo" class="bottom-nav-item">
+    <i class="fas fa-calendar-days"></i>
+    <span>Fixture</span>
+  </a>
+  <a routerLink="/participantes" routerLinkActive="activo" class="bottom-nav-item">
+    <i class="fas fa-user-group"></i>
+    <span>Participantes</span>
+  </a>
+  <a routerLink="/resultados" routerLinkActive="activo" class="bottom-nav-item">
+    <i class="fas fa-futbol"></i>
+    <span>Resultados</span>
+  </a>
+  <a routerLink="/posiciones" routerLinkActive="activo" class="bottom-nav-item">
+    <i class="fas fa-trophy"></i>
+    <span>Posiciones</span>
+  </a>
+  <a routerLink="/estadisticas" routerLinkActive="activo" class="bottom-nav-item">
+    <i class="fas fa-chart-simple"></i>
+    <span>Estadísticas</span>
+  </a>
   }
 </nav>
 
@@ -165,7 +167,7 @@
 <footer class="footer">
   <p>
     Prode Mundial 2026 &mdash; Canadá &middot; Estados Unidos &middot; México
-    <br/>
+    <br />
     <a routerLink="/reglamento">Reglamento</a>
     &nbsp;|&nbsp;
     <a [routerLink]="admin() ? '/admin' : '/admin/login'">Administración</a>

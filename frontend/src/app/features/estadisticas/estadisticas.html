@@ -1,0 +1,190 @@
+<main class="main">
+    <h2><i class="fas fa-chart-simple"></i> Estadísticas y Pronósticos</h2>
+    <p class="subtitulo">
+        <i class="fas fa-circle-info" style="color:var(--clr-primary-light);font-size:0.8rem"></i>
+        Análisis de predicciones y pronósticos de clasificación por grupo.
+    </p>
+
+    <!-- ── Tabs ──────────────────────────────────────────────────────── -->
+    <div class="tabs-wrap">
+        <button class="tab-btn" [class.activo]="tabActivo() === 'estadisticas'" (click)="tabActivo.set('estadisticas')"
+            type="button">
+            <i class="fas fa-chart-bar"></i>
+            Predicciones
+        </button>
+        <button class="tab-btn" [class.activo]="tabActivo() === 'pronosticos'" (click)="tabActivo.set('pronosticos')"
+            type="button">
+            <i class="fas fa-trophy"></i>
+            Pronósticos
+        </button>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+           TAB: ESTADÍSTICAS DE PREDICCIONES
+      ═══════════════════════════════════════════════════════ -->
+    @if (tabActivo() === 'estadisticas') {
+
+    @if (cargando()) {
+    <div class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+    }
+
+    @if (!cargando() && (estadisticas().length === 0 || totalPlanillas() === 0)) {
+    <div class="estado-vacio">
+        <i class="fas fa-chart-simple icono-vacio"></i>
+        <p class="titulo-vacio">Sin estadísticas aún</p>
+        <p class="desc-vacio">Las estadísticas aparecerán aquí cuando haya participantes confirmados.</p>
+    </div>
+    }
+
+    @if (!cargando() && estadisticas().length > 0 && totalPlanillas() > 0) {
+
+    <div class="stats-overview">
+        <div class="overview-card">
+            <i class="fas fa-file-contract"></i>
+            <div class="overview-data">
+                <span class="overview-num odometer" [style.--num]="totalPlanillas()"></span>
+                <span class="overview-label">Planillas Totales</span>
+            </div>
+        </div>
+        <div class="overview-card">
+            <i class="fas fa-house"></i>
+            <div class="overview-data">
+                <span class="overview-num odometer" [style.--num]="totalPrediccionesLocal()"></span>
+                <span class="overview-label">Votos Local</span>
+            </div>
+        </div>
+        <div class="overview-card">
+            <i class="fas fa-equals"></i>
+            <div class="overview-data">
+                <span class="overview-num odometer" [style.--num]="totalPrediccionesEmpate()"></span>
+                <span class="overview-label">Votos Empate</span>
+            </div>
+        </div>
+        <div class="overview-card">
+            <i class="fas fa-plane-departure"></i>
+            <div class="overview-data">
+                <span class="overview-num odometer" [style.--num]="totalPrediccionesVisitante()"></span>
+                <span class="overview-label">Votos Visitante</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="filtro-grupos">
+        <button type="button" class="btn-grupo" [class.activo]="grupoActivo() === null"
+            (click)="grupoActivo.set(null)">Todos</button>
+        @for (g of grupos; track g) {
+        <button type="button" class="btn-grupo" [class.activo]="grupoActivo() === g" (click)="grupoActivo.set(g)">{{ g
+            }}</button>
+        }
+    </div>
+
+    <div class="stats-grid">
+        @for (stat of estadisticasFiltradas(); track stat.numeroPartido) {
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <span class="stat-num">#{{ stat.numeroPartido }}</span>
+                <div class="stat-equipos">
+                    <span class="stat-local">{{ stat.equipoLocal }}</span>
+                    <span class="stat-vs">vs</span>
+                    <span class="stat-visitante">{{ stat.equipoVisitante }}</span>
+                </div>
+            </div>
+            <div class="stat-barras">
+                <div class="barra-row">
+                    <span class="barra-label" title="{{ stat.votosLocal }} votos">({{ stat.votosLocal }}) {{
+                        stat.equipoLocal }}</span>
+                    <div class="barra-track">
+                        <div class="barra-fill barra-local" [style.width.%]="getPct(stat.votosLocal, stat.totalVotos)">
+                        </div>
+                    </div>
+                    <span class="barra-pct">{{ getPct(stat.votosLocal, stat.totalVotos) | number:'1.0-0' }}%</span>
+                </div>
+                <div class="barra-row">
+                    <span class="barra-label" title="{{ stat.votosEmpate }} votos">({{ stat.votosEmpate }})
+                        Empate</span>
+                    <div class="barra-track">
+                        <div class="barra-fill barra-empate"
+                            [style.width.%]="getPct(stat.votosEmpate, stat.totalVotos)"></div>
+                    </div>
+                    <span class="barra-pct">{{ getPct(stat.votosEmpate, stat.totalVotos) | number:'1.0-0' }}%</span>
+                </div>
+                <div class="barra-row">
+                    <span class="barra-label" title="{{ stat.votosVisitante }} votos">({{ stat.votosVisitante }}) {{
+                        stat.equipoVisitante }}</span>
+                    <div class="barra-track">
+                        <div class="barra-fill barra-visitante"
+                            [style.width.%]="getPct(stat.votosVisitante, stat.totalVotos)"></div>
+                    </div>
+                    <span class="barra-pct">{{ getPct(stat.votosVisitante, stat.totalVotos) | number:'1.0-0' }}%</span>
+                </div>
+            </div>
+            @if (getFavorito(stat)) {
+            <div class="stat-card-footer">
+                <span class="favorito-label">Favorito:</span>
+                <span class="favorito-valor">{{ getFavorito(stat) }}</span>
+            </div>
+            }
+        </div>
+        }
+    </div>
+
+    }
+    }
+
+    <!-- ══════════════════════════════════════════════════════
+           TAB: PRONÓSTICOS DE CLASIFICACIÓN
+      ═══════════════════════════════════════════════════════ -->
+    @if (tabActivo() === 'pronosticos') {
+
+    <div class="pronosticos-intro">
+        <i class="fas fa-circle-info"></i>
+        Probabilidades estimadas de clasificación por equipo en cada grupo, basadas en el análisis táctico y estadístico
+        del torneo.
+        <span class="legend-inline">
+            <span class="legend-dot pos-1-dot"></span>1°
+            <span class="legend-dot pos-2-dot"></span>2°
+            <span class="legend-dot pos-3-dot"></span>Mejor 3°
+            <span class="legend-dot pos-4-dot"></span>Eliminado
+        </span>
+    </div>
+
+    <div class="filtro-grupos">
+        <button type="button" class="btn-grupo" [class.activo]="grupoPronostico() === null"
+            (click)="grupoPronostico.set(null)">Todos</button>
+        @for (g of grupos; track g) {
+        <button type="button" class="btn-grupo" [class.activo]="grupoPronostico() === g"
+            (click)="grupoPronostico.set(g)">{{ g }}</button>
+        }
+    </div>
+
+    <div class="pronosticos-grid">
+        @for (p of pronosticosFiltrados(); track p.grupo) {
+        <div class="stat-card pronostico-card">
+            <div class="stat-card-header">
+                <span class="stat-num">GRUPO {{ p.grupo }}</span>
+                <span class="pronostico-nota">{{ p.nota }}</span>
+            </div>
+            <div class="stat-barras">
+                @for (eq of p.equipos; track eq.nombre) {
+                <div class="barra-row">
+                    <span class="barra-label">
+                        <span class="pos-badge pos-badge-{{ eq.pos }}">{{ eq.pos }}°</span>
+                        {{ eq.nombre }}
+                    </span>
+                    <div class="barra-track">
+                        <div class="barra-fill" [class.barra-pos1]="eq.pos === 1" [class.barra-pos2]="eq.pos === 2"
+                            [class.barra-pos3]="eq.pos === 3" [class.barra-pos4]="eq.pos === 4"
+                            [style.width.%]="getPctRelativo(eq.pct, p.equipos)"></div>
+                    </div>
+                    <span class="barra-pct">{{ eq.pct }}%</span>
+                </div>
+                }
+            </div>
+        </div>
+        }
+    </div>
+
+    }
+</main>

@@ -9,217 +9,8 @@ import { PlanillaResponse } from '../../shared/models/planilla.model';
   selector: 'app-participantes',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  template: `
-    <main class="main">
-      <h2><i class="fas fa-user-group"></i> Participantes Confirmados</h2>
-      <p class="subtitulo">
-        <i class="fas fa-circle-info" style="color:var(--clr-primary-light);font-size:0.8rem"></i>
-        Listado de todos los participantes que han confirmado su planilla.
-      </p>
-
-      @if (cargando()) {
-        <div class="spinner-container"><div class="spinner"></div></div>
-      }
-
-      @if (!cargando() && planillas().length === 0) {
-        <div class="estado-vacio">
-          <i class="fas fa-user-group icono-vacio"></i>
-          <p class="titulo-vacio">Sin participantes aún</p>
-          <p class="desc-vacio">No hay planillas confirmadas todavía.</p>
-        </div>
-      }
-
-      @if (!cargando() && planillas().length > 0) {
-        <div class="table-container">
-          <table class="tabla-participantes">
-          <caption>
-            Total confirmados al {{ hoy | date:'dd/MM/yyyy' }}: {{ planillas().length }}
-          </caption>
-          <thead>
-            <tr>
-              <th class="col-nombre">
-                <div class="header-nombre-content">
-                  <span class="header-label">Nombre y Apellido</span>
-                  <div class="buscador-inline">
-                    <i class="fas fa-magnifying-glass"></i>
-                    <input
-                      type="text"
-                      id="buscarParticipante"
-                      name="buscarParticipante"
-                      class="buscador-input"
-                      placeholder="Buscar..."
-                      (input)="filtrar($event)"
-                    />
-                  </div>
-                  <span class="total-chip">
-                    ({{ planillasFiltradas().length }} participantes)
-                  </span>
-                </div>
-              </th>
-              <th style="width: 150px;">Planilla N°</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (p of planillasPaginadas(); track p.codigo) {
-              <tr>
-                <td data-label="Nombre">{{ p.nombre }} {{ p.apellido }}</td>
-                <td data-label="Planilla">
-                  <a [routerLink]="['/planillas', p.codigo]" class="link-planilla" title="Ver planilla">
-                    {{ p.codigo }}
-                    <i class="fas fa-arrow-up-right-from-square" style="font-size:0.6rem;opacity:0.6"></i>
-                  </a>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-
-        <!-- Paginación -->
-        @if (totalPaginas() > 1) {
-          <div class="paginacion">
-            <button 
-              class="btn-pag" 
-              [disabled]="paginaActual() === 1"
-              (click)="cambiarPagina(paginaActual() - 1)"
-              title="Anterior"
-            >
-              <i class="fas fa-chevron-left"></i>
-            </button>
-
-            <div class="pag-numeros">
-              @for (p of paginas(); track p) {
-                <button 
-                  class="btn-num" 
-                  [class.activo]="p === paginaActual()"
-                  (click)="cambiarPagina(p)"
-                >
-                  {{ p }}
-                </button>
-              }
-            </div>
-
-            <button 
-              class="btn-pag" 
-              [disabled]="paginaActual() === totalPaginas()"
-              (click)="cambiarPagina(paginaActual() + 1)"
-              title="Siguiente"
-            >
-              <i class="fas fa-chevron-right"></i>
-            </button>
-          </div>
-        }
-      }
-    </main>
-  `,
-  styles: [`
-    .tabla-participantes { width: 100%; border-collapse: collapse; }
-    .tabla-participantes th { 
-      background: var(--clr-surface-alt); 
-      color: var(--clr-text-muted); 
-      font-size: 0.68rem; 
-      text-transform: uppercase; 
-      letter-spacing: 0.8px;
-      padding: 0.85rem 1rem;
-      border-bottom: 1.5px solid var(--clr-border-strong);
-      text-align: left;
-    }
-    .tabla-participantes th.col-nombre { text-align: left; }
-    
-    .header-nombre-content {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-md);
-    }
-
-    .header-label { flex-shrink: 0; }
-
-    .buscador-inline {
-      display: flex;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.6);
-      border: 1px solid var(--clr-border-strong);
-      border-radius: 4px;
-      padding: 0 var(--spacing-sm);
-      gap: var(--spacing-xs);
-      flex: 1;
-      max-width: 160px;
-      height: 24px;
-    }
-
-    .buscador-inline i { font-size: 0.65rem; color: var(--clr-text-muted); }
-
-    .buscador-input {
-      background: transparent;
-      border: none;
-      width: 100%;
-      font-family: var(--font-body);
-      font-size: 0.75rem;
-      color: var(--clr-text);
-      padding: 0;
-      height: 100%;
-      outline: none;
-    }
-
-    .total-chip {
-      font-size: 0.62rem;
-      color: var(--clr-text-muted);
-      white-space: nowrap;
-      text-transform: none;
-      letter-spacing: normal;
-      font-weight: 500;
-    }
-
-    .tabla-participantes td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--clr-border); font-size: 0.9rem; }
-    .tabla-participantes td:first-child { text-align: left; font-weight: 500; }
-    .tabla-participantes td:last-child { text-align: right; }
-
-    @media (max-width: 600px) {
-      .tabla-participantes thead { display: none; }
-      .tabla-participantes tr { display: flex; flex-direction: column; padding: 1rem; gap: 0.5rem; border-bottom: 1px solid var(--clr-border); }
-      .tabla-participantes td { display: flex; justify-content: space-between; padding: 0; border: none; }
-      .tabla-participantes td:last-child { text-align: left; }
-      
-      /* Labels para modo stack */
-      .tabla-participantes td::before {
-        content: attr(data-label);
-        font-weight: 700;
-        color: var(--clr-text-muted);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-      }
-
-      .header-nombre-content {
-        flex-direction: column;
-        align-items: stretch;
-        gap: var(--spacing-sm);
-      }
-
-      .buscador-inline {
-        max-width: 100%;
-        order: 2;
-      }
-
-      .total-chip {
-        order: 3;
-      }
-    }
-
-    .link-planilla {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35em;
-      font-size: 0.85rem;
-      color: var(--clr-primary);
-      font-weight: 600;
-      text-decoration: none;
-      transition: var(--transition);
-    }
-
-    .link-planilla:hover { color: var(--clr-primary-dark); transform: translateX(2px); }
-
-    /* Paginación y otros estilos movidos a global o simplificados */
-  `]
+  templateUrl: './participantes.html',
+  styleUrl: './participantes.css'
 })
 export class ParticipantesComponent implements OnInit {
 
@@ -238,7 +29,7 @@ export class ParticipantesComponent implements OnInit {
     return this.planillasFiltradas().slice(inicio, fin);
   });
 
-  totalPaginas = computed(() => 
+  totalPaginas = computed(() =>
     Math.ceil(this.planillasFiltradas().length / this.itemsPorPagina)
   );
 
@@ -247,7 +38,7 @@ export class ParticipantesComponent implements OnInit {
     return Array.from({ length: total }, (_, i) => i + 1);
   });
 
-  constructor(private planillaService: PlanillaService) {}
+  constructor(private planillaService: PlanillaService) { }
 
   ngOnInit(): void {
     this.planillaService.listar().subscribe({
@@ -264,7 +55,7 @@ export class ParticipantesComponent implements OnInit {
     const termino = (evento.target as HTMLInputElement).value.toLowerCase();
     this.planillasFiltradas.set(
       this.planillas().filter(p =>
-        p.nombre.toLowerCase().includes(termino)   ||
+        p.nombre.toLowerCase().includes(termino) ||
         p.apellido.toLowerCase().includes(termino)
       )
     );

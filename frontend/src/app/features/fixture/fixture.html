@@ -1,0 +1,159 @@
+<main class="main">
+    <h2><i class="fas fa-calendar-days"></i> Fixture de la Copa del Mundo 2026</h2>
+
+    <p class="subtitulo">
+        <i class="fas fa-circle-info" style="color:var(--clr-primary-light);font-size:0.8rem"></i>
+        Calendario completo de los <strong>72 partidos</strong> de la fase de grupos.
+    </p>
+
+    <!-- Filtro de fases (Oculto temporalmente)
+      <div class="fase-tabs">
+        @for (fase of fases; track fase.valor) {
+          <button
+            class="fase-tab"
+            [class.activo]="filtroActual() === fase.valor"
+            (click)="filtroActual.set(fase.valor)"
+          >
+            <i [class]="fase.icono" style="font-size:0.75rem"></i>
+            {{ fase.label }}
+            @if (filtroActual() === fase.valor && !cargando()) {
+              <span class="fase-count">{{ cantidadFiltrada() }}</span>
+            }
+          </button>
+        }
+      </div>
+      -->
+
+    @if (cargando()) {
+    <div class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+    }
+
+    <!-- Vista grupos -->
+    @if (!cargando() && filtroActual() === 'GRUPOS') {
+
+    <!-- Sub-filtro de grupo (Oculto temporalmente)
+        <div class="filtro-grupos">
+          <button class="btn-grupo" [class.activo]="grupoActivo() === null" (click)="grupoActivo.set(null)">
+            Todos
+          </button>
+          @for (g of grupos; track g) {
+            <button class="btn-grupo" [class.activo]="grupoActivo() === g" (click)="grupoActivo.set(g)">
+              {{ g }}
+            </button>
+          }
+        </div>
+        -->
+
+    <div class="groups-grid">
+        @for (grupo of gruposMostrados(); track grupo) {
+        <div class="group-table-wrap">
+            <div class="group-caption">
+                <div class="caption-header-row">
+                    <div class="caption-left">
+                        <span class="group-label">GRUPO</span>
+                        <span class="group-letter">{{ grupo }}</span>
+                    </div>
+                </div>
+                <div class="group-teams-mobile">
+                    @for (eq of getEquiposDelGrupo(grupo); track eq.nombre) {
+                    <div class="mobile-team-item">
+                        <img [src]="eq.bandera" [alt]="eq.nombre" class="flag-mini" />
+                        <span class="team-name-mini">{{ eq.nombre | shortCountry }}</span>
+                    </div>
+                    }
+                </div>
+            </div>
+            <table class="tabla-grupo">
+                <thead>
+                    <tr>
+                        <th class="th-num">#</th>
+                        <th>Local</th>
+                        <th class="th-center"></th>
+                        <th>Visitante</th>
+                        <th class="th-date">Fecha</th>
+                        <th class="th-sede">Sede</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (partido of getPartidosPorGrupo(grupo); track partido.id) {
+                    <tr [class.partido-jugado]="esJugado(partido)">
+                        <td class="th-num col-muted">{{ partido.numero }}</td>
+                        <td class="td-equipo">
+                            <div class="equipo-vertical">
+                                <img [src]="partido.equipoLocalBandera" [alt]="partido.equipoLocalShow" class="flag"
+                                    width="24" height="16" />
+                                <span class="equipo-txt">{{ partido.equipoLocalShow | shortCountry }}</span>
+                            </div>
+                        </td>
+                        <td class="th-center">
+                            @if (esJugado(partido)) {
+                            <span class="badge-final">Final</span>
+                            } @else {
+                            <span class="badge-vs">VS</span>
+                            }
+                        </td>
+                        <td class="td-equipo">
+                            <div class="equipo-vertical">
+                                <img [src]="partido.equipoVisitanteBandera" [alt]="partido.equipoVisitanteShow"
+                                    class="flag" width="24" height="16" />
+                                <span class="equipo-txt">{{ partido.equipoVisitanteShow | shortCountry }}</span>
+                            </div>
+                        </td>
+                        <td class="th-date col-muted">
+                            <div class="date-vertical">
+                                <span>{{ partido.fechaHora | date:'dd/MM' }}</span>
+                                <span class="time-txt">{{ partido.fechaHora | date:'HH:mm' }}</span>
+                            </div>
+                        </td>
+                        <td class="th-sede col-muted">{{ formatEstadio(partido.sede) }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Vista eliminatorias -->
+    @if (!cargando() && filtroActual() !== 'GRUPOS') {
+    <div class="elim-wrap">
+        @for (partido of partidosFiltrados(); track partido.id) {
+        <div class="elim-card">
+            <span class="elim-num">#{{ partido.numero }}</span>
+
+            <div class="elim-equipo elim-equipo--local">
+                @if (partido.equipoLocalShow) {
+                <img [src]="partido.equipoLocalBandera" [alt]="partido.equipoLocalShow" class="flag flag-elim"
+                    width="32" height="21" />
+                <span class="elim-nomb">{{ partido.equipoLocalShow | shortCountry }}</span>
+                } @else {
+                <span class="por-definir">Por definir</span>
+                }
+            </div>
+
+            <div class="elim-vs">VS</div>
+
+            <div class="elim-equipo elim-equipo--visit">
+                @if (partido.equipoVisitanteShow) {
+                <span class="elim-nomb">{{ partido.equipoVisitanteShow | shortCountry }}</span>
+                <img [src]="partido.equipoVisitanteBandera" [alt]="partido.equipoVisitanteShow" class="flag flag-elim"
+                    width="32" height="21" />
+                } @else {
+                <span class="por-definir">Por definir</span>
+                }
+            </div>
+
+            <div class="elim-meta">
+                <span class="elim-fecha">{{ partido.fechaHora | date:'dd/MM/yyyy' }}</span>
+                <span class="elim-hora">{{ partido.fechaHora | date:'HH:mm' }} hs</span>
+                <span class="elim-sede">{{ formatEstadio(partido.sede) }}</span>
+            </div>
+        </div>
+        }
+    </div>
+    }
+
+</main>

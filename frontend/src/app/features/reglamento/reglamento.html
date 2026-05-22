@@ -1,0 +1,100 @@
+<main class="main reglamento-main">
+
+    <!-- Hero del reglamento -->
+    <div class="reglamento-hero">
+        <div class="hero-badge">
+            <i class="fas fa-circle-info" aria-hidden="true"></i>
+            Guía de Participación
+        </div>
+        <h2 class="hero-titulo">
+            <i class="fas fa-clipboard-list" aria-hidden="true"></i>
+            ¿Cómo Participar?
+        </h2>
+        <p class="hero-subtitulo">
+            Seguí estos pasos para sumarte al Prode Mundial 2026<br>
+            <strong>Canadá · Estados Unidos · México</strong>
+        </p>
+        <div class="hero-fechas">
+            <div class="fecha-item">
+                <i class="fas fa-calendar-plus" aria-hidden="true"></i>
+                <div>
+                    <span class="fecha-label">Inicio del torneo</span>
+                    <span class="fecha-valor">11 de junio de 2026</span>
+                </div>
+            </div>
+            <div class="fecha-sep" aria-hidden="true"></div>
+            <div class="fecha-item">
+                <i class="fas fa-calendar-check" aria-hidden="true"></i>
+                <div>
+                    <span class="fecha-label">Fin de grupos</span>
+                    <span class="fecha-valor">2 de julio de 2026</span>
+                </div>
+            </div>
+            <div class="fecha-sep" aria-hidden="true"></div>
+            <div class="fecha-item">
+                <i class="fas fa-futbol" aria-hidden="true"></i>
+                <div>
+                    <span class="fecha-label">Final del mundial</span>
+                    <span class="fecha-valor">19 de julio de 2026</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Índice rápido -->
+    <nav class="indice-rapido" aria-label="Índice de la guía">
+        <p class="indice-titulo"><i class="fas fa-shoe-prints" aria-hidden="true"></i> Pasos a seguir</p>
+        <div class="indice-links">
+            @for (art of articulos; track art.numero) {
+            <button type="button" (click)="scrollTo('art-' + art.numero)" class="indice-link"
+                [attr.aria-label]="'Ir al paso ' + art.numero">
+                <span class="indice-num">{{ art.numero }}</span>
+                <span class="indice-text">{{ art.titulo }}</span>
+            </button>
+            }
+        </div>
+    </nav>
+
+    <!-- Artículos -->
+    <div class="articulos-lista" role="main">
+        @for (art of articulos; track art.numero) {
+        <article class="articulo-card" [id]="'art-' + art.numero" [attr.aria-labelledby]="'titulo-art-' + art.numero">
+            <div class="articulo-header">
+                <div class="articulo-icono" aria-hidden="true">
+                    <i [class]="'fas ' + art.icono"></i>
+                </div>
+                <div class="articulo-meta">
+                    <span class="articulo-num">Paso {{ art.numero }}</span>
+                    <h3 class="articulo-titulo" [id]="'titulo-art-' + art.numero">{{ art.titulo }}</h3>
+                </div>
+            </div>
+
+            <div class="articulo-body">
+                <div [innerHTML]="art.contenido"></div>
+                @if (art.destacado) {
+                <div class="articulo-destacado" role="note">
+                    <i class="fas fa-circle-info" aria-hidden="true"></i>
+                    <span [innerHTML]="art.destacado"></span>
+                </div>
+                }
+            </div>
+        </article>
+        }
+    </div>
+
+    <!-- Footer CTA -->
+    <div class="reglamento-cta">
+        <div class="cta-inner">
+            <i class="fas fa-list-check cta-icono" aria-hidden="true"></i>
+            <div class="cta-texto">
+                <strong>¿Listo para participar?</strong>
+                <span>Cargá tu planilla antes del cierre de inscripciones.</span>
+            </div>
+            <a routerLink="/planilla" class="btn btn-primary cta-btn">
+                <i class="fas fa-pencil" aria-hidden="true"></i>
+                Cargar mi planilla
+            </a>
+        </div>
+    </div>
+
+</main>
