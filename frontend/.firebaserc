@@ -1,7 +1,7 @@
 {
   "projects": {
-    "default": "prode-mundial-2026-62343",
-    "prode-prod": "prode-mundial-2026-62343"
+    "default": "prueba-prode",
+    "prode-prod": "prueba-prode"
   },
   "targets": {},
   "etags": {}
